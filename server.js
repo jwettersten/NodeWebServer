@@ -13,5 +13,5 @@ var TCPServer = new net.createServer(function(connListener) {
 });
 
 TCPServer.listen(8080, function() {
-  console.log('server bound');
+  console.log('server has been bound and now listening!');
 });

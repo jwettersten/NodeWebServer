@@ -4,7 +4,7 @@ var testServer = require('../server.js');
 describe('node TCPServer', function() {
 
   it('should return a TCPServer instance', function() {
-    expect(testServer.TCPServer).not.toBe(null);
+    expect(testServer).not.toBe(undefined);
   });
 
   it('should return hey dude.', function() {
