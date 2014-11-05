@@ -1,22 +1,17 @@
 var net = require('net');
-var fs = require('fs');
 
-// Create socket file
-fs.open('/Users/jwettersten/Documents/Projects/NodeWebServer/node.sock', 'w+', function(err, fdesc) {
-  if (err || !fdesc) {
-    throw 'Error: ' + (err || 'No fdesc');
-  }
+var TCPServer = new net.createServer(function(connListener) {
+  console.log('server connected');
 
-  var socketServer = new net.Socket({
-    fd: [0, 1, 2],
-    allowHalfOpen: true,
-    readable: true,
-    writable: true
+  connListener.on('end', function() {
+    console.log('server disconnected');
   });
 
-  socketServer.write('Hey dude');
-  socketServer.end();
+  connListener.write('hey dude.');
+  connListener.pipe(connListener);
 
 });
 
-
+TCPServer.listen(8080, function() {
+  console.log('server bound');
+});
