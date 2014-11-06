@@ -37,4 +37,20 @@ describe('node TCPServer', function() {
     });
   });
 
+  it('should echo GET', function() {
+    var testMessage = 'GET / HTTP/1.1';
+
+    var testClient = net.connect({port: PORT}, function() {
+      testClient.write(testMessage);
+    });
+
+    waits(1000);
+
+    testClient.on('data', function(data) {
+      expect(data.toString()).toBe(testHeaderOK + 'GET');
+      testClient.end();
+    });
+  });
+
+
 });

@@ -1,4 +1,5 @@
 var net = require('net');
+var fs = require('fs');
 
 var PORT = 8080;
 
@@ -12,8 +13,21 @@ var TCPServer = new net.createServer(function(connListener) {
 
   connListener.on('data', function(data) {
     console.log('data received from client: ' + data);
-    // echo back to client
-    connListener.write(data);
+
+    var clientData = data.toString().split(' ');
+
+    // check data and route appriately
+    if (clientData[0] === 'GET') {
+      if (clientData[1] === '/file1') {
+        console.log('GET request for: ' + data);
+        connListener.write(fs.readFileSync(data, {encoding: String}));
+      } else {
+        connListener.write(clientData[0]);
+      }
+    } else {
+      // echo back to client
+      connListener.write(data);
+    }
   });
 
   connListener.write(responseContent);
