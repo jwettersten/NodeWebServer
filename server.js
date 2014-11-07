@@ -1,5 +1,6 @@
 var net = require('net');
 var fs = require('fs');
+var router = require('./router');
 
 var PORT = 8080;
 
@@ -10,7 +11,9 @@ var TCPServer = new net.createServer(function(connListener) {
   connListener.on('data', function(data) {
     console.log('data received from client: ' + data);
 
-    var clientData = data.toString().split(' ');
+    router.route(data);
+
+     var clientData = data.toString().split(' ');
 
     // check data and route appriately
     if (clientData[0] === 'GET') {
