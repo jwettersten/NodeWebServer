@@ -7,10 +7,6 @@ var TCPServer = new net.createServer(function(connListener) {
   var responseContent = 'HTTP/1.1 200 OK' + '\r\n';
   console.log('server connected');
 
-  connListener.on('end', function() {
-    console.log('server disconnected');
-  });
-
   connListener.on('data', function(data) {
     console.log('data received from client: ' + data);
 
@@ -18,19 +14,28 @@ var TCPServer = new net.createServer(function(connListener) {
 
     // check data and route appriately
     if (clientData[0] === 'GET') {
-      if (clientData[1] === '/file1') {
-        console.log('GET request for: ' + data);
-        connListener.write(fs.readFileSync(data, {encoding: String}));
+     if (clientData[1] === '/file1') {
+        console.log('GET request for: ' + clientData[1]);
+        var fileStream = fs.createReadStream('./public' + clientData[1]);
+        fileStream.pipe(connListener);
       } else {
-        connListener.write(clientData[0]);
+        connListener.write(responseContent + clientData[0]);
       }
     } else {
       // echo back to client
-      connListener.write(data);
+      connListener.write(responseContent + data);
     }
+
   });
 
-  connListener.write(responseContent);
+  connListener.on('end', function() {
+    console.log('server disconnected');
+  });
+
+  connListener.on('error', function(error) {
+    console.log('Error thrown: ' + error);
+  });
+
 });
 
 TCPServer.listen(PORT, function() {

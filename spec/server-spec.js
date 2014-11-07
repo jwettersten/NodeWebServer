@@ -12,18 +12,20 @@ describe('node TCPServer', function() {
 
   it('should return 200 header data', function() {
 
-    var testClient = net.connect({port: PORT}, function() {});
+    var testClient = net.connect({port: PORT}, function() {
+      console.log('testClient connected to server, not sending data.');
+    });
 
     waits(1000);
 
     testClient.on('data', function(data) {
-      expect(data.toString()).toBe(testHeaderOK);
+      expect(data.toString()).toBe('');
       testClient.end();
     });
   });
 
   it('should echo data sent', function() {
-    var testMessage = 'Hey TCPServer';
+    var testMessage = 'Sending non http method string TCPServer';
 
     var testClient = net.connect({port: PORT}, function() {
       testClient.write(testMessage);
@@ -52,5 +54,19 @@ describe('node TCPServer', function() {
     });
   });
 
+  it('should GET file1 contents', function() {
+    var testMessage = 'GET /file1 HTTP/1.1';
+
+    var testClient = net.connect({port: PORT}, function() {
+      testClient.write(testMessage);
+    });
+
+    waits(1000);
+
+    testClient.on('data', function(data) {
+      expect(data.toString()).toBe('file1 contents');
+      testClient.end();
+    });
+  });
 
 });
