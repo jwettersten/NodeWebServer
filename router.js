@@ -12,8 +12,9 @@ function route(pathData, connListener) {
     if (clientData[1] === '/file1') {
       console.log('GET request for: ' + clientData[1]);
       var fileStream = fs.createReadStream('./public' + clientData[1]);
-      fileStream.pipe(connListener, {end: false});
+      fileStream.pipe(connListener);
       fileStream.on('end', function() {
+        console.log('stream has ended');
         connListener.end();
       });
     } else {
