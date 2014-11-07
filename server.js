@@ -1,5 +1,4 @@
 var net = require('net');
-var fs = require('fs');
 var router = require('./router');
 
 var PORT = 8080;

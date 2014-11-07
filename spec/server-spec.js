@@ -1,4 +1,5 @@
 var net = require('net');
+var fs = require('fs');
 var testServer = require('../server.js');
 
 var PORT = 8080;
