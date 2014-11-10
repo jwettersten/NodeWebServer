@@ -3,7 +3,7 @@ var fs = require('fs');
 var testServer = require('../server.js');
 
 var PORT = 8080;
-var testHeaderOK = 'HTTP/1.1 200 OK' + '\r\n';
+var testHeaderOK = 'HTTP/1.1 200 OK' + '\r\n' + '\r\n';
 
 describe('node TCPServer', function() {
 
@@ -51,21 +51,6 @@ describe('node TCPServer', function() {
 
     testClient.on('data', function(data) {
       expect(data.toString()).toBe(testHeaderOK);
-      testClient.end();
-    });
-  });
-
-  it('should GET file1 contents', function() {
-    var testMessage = 'GET /file1 HTTP/1.1';
-
-    var testClient = net.connect({port: PORT}, function() {
-      testClient.write(testMessage);
-    });
-
-    waits(1000);
-
-    testClient.on('data', function(data) {
-      expect(data.toString()).toBe('file1 contents');
       testClient.end();
     });
   });

@@ -1,59 +1,41 @@
 var fs = require('fs');
-var Readable = require('stream').Readable;
 var util = require('util');
 
 function route(pathData, connListener) {
-  var responseContent = 'HTTP/1.1 200 OK' + '\r\n';
-  var responseFileHeader = 'Content-Type: text/html' + '\r\n' + 'Content-Length: 35' + '\r\n';
+  var responseHeaaderStatusLine = 'HTTP/1.1 200 OK' + '\r\n' + '\r\n';
 
   var clientData = pathData.toString().split(' ');
 
   // check data and route appriately
   if (clientData[0] === 'GET') {
+
     if (clientData[1] === '/file1') {
-      console.log('GET request for: ' + clientData[1]);
-
-      var rs = new Readable();
-      rs.push(responseContent);
-      rs.push(responseFileHeader);
-
+      connListener.write(responseHeaaderStatusLine);
       var fileStream = fs.createReadStream('./public' + clientData[1]);
-
-      fileStream.on('end', function() {
-        console.log('stream has ended');
-        connListener.end();
-      });
-
       fileStream.pipe(connListener);
 
     } else if (clientData[1] === '/image.jpeg') {
+      connListener.write(responseHeaaderStatusLine);
       var fileStream = fs.createReadStream('./public' + clientData[1]);
       fileStream.pipe(connListener);
-      fileStream.on('end', function() {
-        console.log('stream has ended');
-        connListener.end();
-      });
+
     } else if (clientData[1] === '/image.png') {
+      connListener.write(responseHeaaderStatusLine);
       var fileStream = fs.createReadStream('./public' + clientData[1]);
       fileStream.pipe(connListener);
-      fileStream.on('end', function() {
-        console.log('stream has ended');
-        connListener.end();
-      });
+
     } else if (clientData[1] === '/image.gif') {
+      connListener.write(responseHeaaderStatusLine);
       var fileStream = fs.createReadStream('./public' + clientData[1]);
       fileStream.pipe(connListener);
-      fileStream.on('end', function() {
-        console.log('stream has ended');
-        connListener.end();
-      });
+
     } else {
-      connListener.write(responseContent);
+      connListener.write(responseHeaaderStatusLine);
       connListener.end();
     }
   } else {
     // echo back to client
-    connListener.write(responseContent + pathData);
+    connListener.write(responseHeaaderStatusLine + pathData);
   }
 }
 
