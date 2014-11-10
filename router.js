@@ -1,5 +1,5 @@
 var fs = require('fs');
-var util = require('util');
+var requestHandlers = require('./requestHandlers');
 
 function route(pathData, connListener) {
   var responseHeaaderStatusLine = 'HTTP/1.1 200 OK' + '\r\n' + '\r\n';
@@ -8,30 +8,12 @@ function route(pathData, connListener) {
 
   // check data and route appriately
   if (clientData[0] === 'GET') {
-
-    if (clientData[1] === '/file1') {
-      connListener.write(responseHeaaderStatusLine);
-      var fileStream = fs.createReadStream('./public' + clientData[1]);
-      fileStream.pipe(connListener);
-
-    } else if (clientData[1] === '/image.jpeg') {
-      connListener.write(responseHeaaderStatusLine);
-      var fileStream = fs.createReadStream('./public' + clientData[1]);
-      fileStream.pipe(connListener);
-
-    } else if (clientData[1] === '/image.png') {
-      connListener.write(responseHeaaderStatusLine);
-      var fileStream = fs.createReadStream('./public' + clientData[1]);
-      fileStream.pipe(connListener);
-
-    } else if (clientData[1] === '/image.gif') {
-      connListener.write(responseHeaaderStatusLine);
-      var fileStream = fs.createReadStream('./public' + clientData[1]);
-      fileStream.pipe(connListener);
-
+    if (typeof requestHandlers.handlers[clientData[1]] === 'function') {
+      requestHandlers.handlers[clientData[1]](connListener);
     } else {
       connListener.write(responseHeaaderStatusLine);
-      connListener.end();
+      var fileStream = fs.createReadStream('./public' + clientData[1]);
+      fileStream.pipe(connListener);
     }
   } else {
     // echo back to client
