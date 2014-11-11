@@ -3,7 +3,6 @@ var exec=require("child_process").exec;
 var constants = require('./constants');
 
 function listDirectory(connListener) {
-  console.log('request to list directory');
   exec('ls ./public -lah', function (error, stdout, stderr) {
     var htmlResponseBegin = '<html><head></head><body><ul>';
     var stdOutToHTML = '';
