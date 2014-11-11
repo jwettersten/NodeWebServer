@@ -10,7 +10,6 @@ var TCPServer = new net.createServer(function(connListener) {
     console.log('data received from client: ' + data);
 
     router.route(data, connListener);
-
   });
 
   connListener.on('end', function() {

@@ -1,5 +1,4 @@
 var net = require('net');
-var fs = require('fs');
 var testServer = require('../server.js');
 
 var PORT = 8080;
@@ -38,25 +37,6 @@ describe('node TCPServer', function() {
       expect(data.toString()).toBe(testHeaderOK + testMessage);
       testClient.end();
     });
-  });
-
-  it('sending GET / should return OK', function() {
-    var testMessage = 'GET / HTTP/1.1';
-
-    var testClient = net.connect({port: PORT}, function() {
-      testClient.write(testMessage);
-    });
-
-    waits(1000);
-
-    testClient.on('data', function(data) {
-      expect(data.toString()).toBe(testHeaderOK);
-      testClient.end();
-    });
-  });
-
-  it('should use requestHandlers', function() {
-
   });
 
 });
