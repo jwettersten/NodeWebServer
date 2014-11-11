@@ -4,7 +4,9 @@ var constants = require('./constants');
 var requestHandlers = require('./requestHandlers');
 
 var handlers = {
-  '/' : requestHandlers.listDirectory
+  '/' : requestHandlers.listDirectory,
+  '/load' : requestHandlers.loadFile,
+  '/echo' : requestHandlers.echoRequest
 };
 
 var TCPServer = new net.createServer(function(connListener) {
