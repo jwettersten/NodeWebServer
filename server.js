@@ -8,7 +8,6 @@ var TCPServer = new net.createServer(function(connListener) {
 
   connListener.on('data', function(data) {
     console.log('data received from client: ' + data);
-
     router.route(data, connListener);
   });
 
@@ -19,7 +18,6 @@ var TCPServer = new net.createServer(function(connListener) {
   connListener.on('error', function(error) {
     console.log('Error thrown: ' + error);
   });
-
 });
 
 TCPServer.listen(PORT, function() {
