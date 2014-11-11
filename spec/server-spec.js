@@ -1,8 +1,8 @@
 var net = require('net');
+var constants = require('../constants');
 var testServer = require('../server.js');
 
 var PORT = 8080;
-var testHeaderOK = 'HTTP/1.1 200 OK' + '\r\n' + '\r\n';
 
 describe('node TCPServer', function() {
 
@@ -34,7 +34,7 @@ describe('node TCPServer', function() {
     waits(1000);
 
     testClient.on('data', function(data) {
-      expect(data.toString()).toBe(testHeaderOK + testMessage);
+      expect(data.toString()).toBe(constants.NODEWEBSERVER.headers["responseHeaaderStatusLineOK"] + testMessage);
       testClient.end();
     });
   });
