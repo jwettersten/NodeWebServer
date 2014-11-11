@@ -4,8 +4,16 @@ var constants = require('./constants');
 
 function listDirectory(connListener) {
   console.log('request to list directory');
-  exec("ls ./public -lah", function (error, stdout, stderr) {
-    writeStreamToClient(connListener, constants.HEADERS["OK"] + stdout);
+  exec('ls ./public -lah', function (error, stdout, stderr) {
+    var htmlResponseBegin = '<html><head></head><body><ul>';
+    var stdOutToHTML = '';
+    var stdOutData = stdout.toString().split('\n');
+    for (var i=0; i<stdOutData.length - 1; i++) {
+      stdOutToHTML += '<li><a href="' + stdOutData[i] + '">' + stdOutData[i] + '</a></li>';
+    }
+    var htmlResponseEnd = '</ul></body></html>';
+
+    writeStreamToClient(connListener, constants.HEADERS["OK"] + htmlResponseBegin + stdOutToHTML + htmlResponseEnd);
   });
 }
 
