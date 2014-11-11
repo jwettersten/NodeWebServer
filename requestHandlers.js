@@ -8,15 +8,18 @@ var handlers = {
 
 function listDirectory(connListener) {
   console.log('request to list directory');
-  exec("ls -lah", function (error, stdout, stderr) {
+  exec("ls ./public -lah", function (error, stdout, stderr) {
     writeStreamToClient(connListener, constants.NODEWEBSERVER.headers["responseHeaaderStatusLineOK"] + stdout);
   });
 }
 
 function loadFile(connListener, fileName) {
-   connListener.write(constants.NODEWEBSERVER.headers["responseHeaaderStatusLineOK"]);
    var fileStream = fs.createReadStream(constants.NODEWEBSERVER.paths["fileDirectory"] + fileName);
-   fileStream.pipe(connListener);
+
+   fileStream.on('open', function() {
+     connListener.write(constants.NODEWEBSERVER.headers["responseHeaaderStatusLineOK"]);
+     fileStream.pipe(connListener);
+   });
 
    fileStream.on('error', function(err) {
      console.log("Could not load requested file: " + err);

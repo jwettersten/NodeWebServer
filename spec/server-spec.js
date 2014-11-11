@@ -15,7 +15,7 @@ describe('node TCPServer', function() {
     var testClient = net.connect({port: PORT}, function() {
       console.log('testClient connected to server, not sending data.');
     });
-
+    // lookup flag signal or semaphore or event flag
     waits(1000);
 
     testClient.on('data', function(data) {
