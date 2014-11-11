@@ -1,12 +1,12 @@
 var requestHandlers = require('./requestHandlers');
 
-function route(pathData, connListener) {
+function route(pathData, handlers, connListener) {
 
   var clientRequestData = pathData.toString().split(' ');
 
   if (clientRequestData[0] === 'GET') {
-    if (typeof requestHandlers.handlers[clientRequestData[1]] === 'function') {
-      requestHandlers.handlers[clientRequestData[1]](connListener);
+    if (typeof handlers[clientRequestData[1]] === 'function') {
+      handlers[clientRequestData[1]](connListener);
     } else {
       requestHandlers.loadFile(connListener, clientRequestData[1]);
     }

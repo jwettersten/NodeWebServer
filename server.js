@@ -1,14 +1,18 @@
 var net = require('net');
 var router = require('./router');
+var constants = require('./constants');
+var requestHandlers = require('./requestHandlers');
 
-var PORT = 8080;
+var handlers = {
+  '/' : requestHandlers.listDirectory
+};
 
 var TCPServer = new net.createServer(function(connListener) {
   console.log('server connected');
 
   connListener.on('data', function(data) {
     console.log('data received from client: ' + data);
-    router.route(data, connListener);
+    router.route(data, handlers, connListener);
   });
 
   connListener.on('end', function() {
@@ -20,6 +24,6 @@ var TCPServer = new net.createServer(function(connListener) {
   });
 });
 
-TCPServer.listen(PORT, function() {
+TCPServer.listen(constants.PORT, function() {
   console.log('server has been bound and now listening!');
 });
