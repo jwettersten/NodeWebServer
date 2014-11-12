@@ -6,10 +6,10 @@ function route(pathData, handlers, connListener) {
     if (typeof handlers[clientRequestData[1]] === 'function') {
       handlers[clientRequestData[1]](connListener);
     } else {
-      handlers['/load'](connListener, clientRequestData[1]);
+      handlers['default'](connListener, clientRequestData[1]);
     }
   } else {
-    handlers['/echo'](connListener, pathData);
+    handlers['echo'](connListener, pathData);
   }
 }
 
